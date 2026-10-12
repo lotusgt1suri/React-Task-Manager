@@ -15,12 +15,15 @@ The code has plain-language comments throughout, so it's meant to be easy to rea
 - **Search** by title or description; it works together with the filter tabs
 - **Priority badges** in a different colour for each level
 - **Sidebar navigation** with an active state; the page heading and subtitle change to match
+- **Responsive layout:**
+  - **Desktop:** a fixed sidebar with the account at the bottom
+  - **Mobile:** a top bar with the logo and account, a bottom navigation menu, and a stacked header
 
 ## Tech stack
 
 - [React 19](https://react.dev/) with function components and `useState`
 - [Vite](https://vite.dev/) for the dev server and build
-- Plain CSS with custom properties (color tokens taken from a Figma design)
+- Plain CSS with custom properties (color tokens taken from a Figma design), Flexbox and CSS Grid
 - ESLint
 
 ## Getting started
@@ -55,10 +58,10 @@ src/
 ├── main.jsx             # Entry point that renders <App />
 ├── assets/              # SVG icons
 └── components/
-    ├── Sidebar.jsx      # Left menu (Brand, Navigation, Account)
+    ├── Sidebar.jsx      # Left menu on desktop, top bar + bottom menu on mobile
     ├── Navigation.jsx   # One sidebar menu item
     ├── Brand.jsx        # Logo and app name
-    ├── Account.jsx      # User shown at the bottom of the sidebar
+    ├── Account.jsx      # Signed-in user (avatar and name)
     ├── Header.jsx       # Page title, search box, "Add Task" button
     ├── FilterTabs.jsx   # All / Pending / Completed tabs
     ├── Tabs.jsx         # One filter tab with its count
@@ -84,6 +87,15 @@ All the app's data lives in `App.jsx`:
 
 The tab counts and the visible list aren't stored separately. They're calculated from `tasks`, `filter` and `searchQuery` every time the app renders, so they're always in sync.
 
+### Responsive layout
+
+The desktop and mobile layouts use the **same HTML**. Only the CSS changes:
+
+- **Breakpoints:**
+  - At **992px** and below, the sidebar becomes a top bar and the menu moves to a fixed bar at the bottom of the screen.
+  - At **767px** and below, the header and the filter tabs rearrange for phones.
+- **`display: contents`** makes wrapper elements disappear from the layout, so their children can be placed directly in the parent's CSS Grid. That's how the account name moves under the logo, and the "Add Task" button moves next to the page title, without changing the markup.
+
 ## React concepts used
 
 - Components and props, including `children` and passing the remaining props through with `...props`
@@ -95,11 +107,12 @@ The tab counts and the visible list aren't stored separately. They're calculated
 - Controlled inputs and form validation
 - Rendering based on conditions
 - Reusing one form component for both adding and editing
+- Responsive CSS with Flexbox, CSS Grid, `grid-template-areas` and `display: contents`
 
 ## Planned improvements
 
+- [x] Make the layout responsive for mobile
+- [x] Replace the emoji edit and delete icons with SVG icons
 - [ ] Save tasks between page reloads with `localStorage` and `useEffect`
-- [ ] Make the layout responsive for mobile
 - [ ] Make the Today, Completed and Settings sidebar pages show their own content
-- [ ] Replace the emoji edit and delete icons with SVG icons
 - [ ] Close the form with the Escape key

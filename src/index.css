@@ -104,6 +104,10 @@ main {
   font-weight: bold;
 }
 
+.sidebar__menu {
+  flex-grow: 1;
+}
+
 .sidebar__menu-list li button {
   color: var(--text-on-sidebar);
   font-size: 14px;
@@ -116,6 +120,7 @@ main {
   background: none;
   border: none;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .sidebar__menu-list li button:hover,
@@ -299,6 +304,11 @@ main {
   color: var(--surface-card);
 }
 
+.task-lists {
+  display: flex;
+  flex-direction: column;
+}
+
 .task {
   display: flex;
   align-items: center;
@@ -307,6 +317,14 @@ main {
   background: var(--surface-card);
   border: 2px solid var(--border-subtle);
   border-radius: 8px;
+  justify-content: space-between;
+}
+
+.task > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .task__content {
@@ -357,6 +375,9 @@ main {
 .task__date {
   font-size: 12px;
   color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .task__actions {
@@ -365,8 +386,190 @@ main {
   flex-wrap: wrap;
 }
 
+.task__actions button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
 .task-list__empty {
   padding: 2rem;
   text-align: center;
   color: var(--text-secondary);
+}
+
+@media only screen and (max-width: 992px) {
+  #root {
+    /* minmax(0, 1fr) lets the column shrink to the screen width. A plain 1fr
+       would grow to fit the widest content and push the page off-screen. */
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  main {
+    padding: 1rem;
+    margin-bottom: 80px;
+  }
+
+  .sidebar__menu {
+    position: fixed;
+    bottom: 0;
+    background-color: var(--surface-sidebar);
+    left: 0;
+    right: 0;
+    padding: 0.8rem;
+  }
+
+  .sidebar__menu-list {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 0.4rem;
+  }
+
+  .sidebar__menu-list li {
+    flex: 1 0 auto;
+  }
+
+  .task-lists {
+    gap: 8px;
+  }
+
+  /*
+   * Sidebar becomes a top bar:
+   *   [logo] TaskManager        (SR) v
+   *   [    ] Surendra Rana
+   *
+   * display: contents makes the Account wrappers "disappear" from the layout,
+   * so the avatar, name and chevron become grid items of .sidebar and can be
+   * placed next to the logo without changing the HTML.
+   * The bottom menu (nav) is position: fixed, so it takes no grid cell.
+   */
+  .sidebar {
+    max-width: none;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    column-gap: 12px;
+    row-gap: 0;
+    padding: 16px;
+  }
+
+  .sidebar__logo {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 18px;
+    line-height: 24px;
+    align-self: stretch;
+  }
+
+  .sidebar__logo img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .sidebar__account,
+  .sidebar__account-user {
+    display: contents;
+  }
+
+  /* Sits in row 2 under "TaskManager": 48px logo + 12px gap = 60px indent. */
+  .sidebar__account-name {
+    grid-column: 1;
+    grid-row: 2;
+    padding-left: 60px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .sidebar__account-avatar {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  .sidebar__account > img {
+    grid-column: 3;
+    grid-row: 1 / 3;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  /*
+   * Header layout on phones:
+   *   All Tasks          [+ Add Task]
+   *   Manage your tasks...
+   *   [ Search tasks...            ]
+   *
+   * The two wrapper divs get display: contents, so the h1, p, search form
+   * and button become direct grid items of .header and can be rearranged.
+   */
+  .header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "title button"
+      "subtitle subtitle"
+      "search search";
+    align-items: center;
+    gap: 8px 12px;
+  }
+
+  .header__title,
+  .header__actions {
+    display: contents;
+  }
+
+  .header__title h1 {
+    grid-area: title;
+    margin: 0;
+  }
+
+  .header__title p {
+    grid-area: subtitle;
+  }
+
+  .header .btn-primary {
+    grid-area: button;
+  }
+
+  .header__form {
+    grid-area: search;
+    margin-top: 8px;
+  }
+
+  .header__form-search {
+    display: block;
+  }
+
+  .header__form-search input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-block: 12px;
+  }
+
+  /* Keep the three filter tabs on one row, sharing the width. */
+  .tabs {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .tabs__item {
+    flex: 1 1 auto;
+  }
+
+  .tabs .tabs__link {
+    width: 100%;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .task {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
