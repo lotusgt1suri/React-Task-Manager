@@ -18,7 +18,7 @@ export default function TaskList({
   }
 
   return (
-    <ul>
+    <ul className="task-lists">
       {/* map() turns each task object into a TaskItem.
           "key" must be unique for every item in a list. It lets React tell the
           items apart when one is added, removed or reordered. We use the

@@ -1,3 +1,7 @@
+import editTask from "../assets/pencil.svg";
+import deleteTask from "../assets/trash.svg";
+import dueDate from "../assets/calendar-days.svg";
+
 /*
  * One row in the task list.
  *
@@ -25,37 +29,42 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }) {
     <li className={`task ${task.completed ? "task--done" : ""}`}>
       {/* A controlled checkbox: it is ticked when task.completed is true, and
           clicking it asks App to flip that value. */}
-      <input type="checkbox" checked={task.completed} onChange={onToggle} />
+      <div>
+        <input type="checkbox" checked={task.completed} onChange={onToggle} />
 
-      <div className="task__content">
-        <h3 className="task__title">{task.title}</h3>
-        <p className="task__desc">{task.description}</p>
+        <div className="task__content">
+          <h3 className="task__title">{task.title}</h3>
+          <p className="task__desc">{task.description}</p>
+        </div>
       </div>
-
-      {/* The class becomes badge--low, badge--medium or badge--high, so each
+      <div>
+        {/* The class becomes badge--low, badge--medium or badge--high, so each
           priority gets its own colour from the CSS. */}
-      <span className={`badge badge--${task.priority}`}>{task.priority}</span>
+        <span className={`badge badge--${task.priority}`}>{task.priority}</span>
 
-      <span className="task__date">{task.dueDate}</span>
+        <span className="task__date">
+          <img src={dueDate} alt="due-date" /> {task.dueDate}
+        </span>
 
-      <div className="task__actions">
-        {/* Opens the form with this task's details already filled in. */}
-        <button
-          type="button"
-          aria-label={`Edit ${task.title}`}
-          onClick={onEdit}
-        >
-          ✏️
-        </button>
-        {/* The icon has no text, so aria-label tells screen readers which
+        <div className="task__actions">
+          {/* Opens the form with this task's details already filled in. */}
+          <button
+            type="button"
+            aria-label={`Edit ${task.title}`}
+            onClick={onEdit}
+          >
+            <img src={editTask} alt="" />
+          </button>
+          {/* The icon has no text, so aria-label tells screen readers which
             task this button deletes. */}
-        <button
-          type="button"
-          aria-label={`Delete ${task.title}`}
-          onClick={handleDelete}
-        >
-          🗑️
-        </button>
+          <button
+            type="button"
+            aria-label={`Delete ${task.title}`}
+            onClick={handleDelete}
+          >
+            <img src={deleteTask} alt="" />
+          </button>
+        </div>
       </div>
     </li>
   );
